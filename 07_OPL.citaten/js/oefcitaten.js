@@ -78,45 +78,40 @@ const searchInput = document.getElementById("searchQuoteInput");
 //state: changes on user action
 let idsOfShownQuotes = [];
 let authorShown = true;
+let favorites = [];
+let alreadyActive = true;
 
 
 function showAuthor() {
-    const {author, info, life} = QUOTES.find(q => q.id === idsOfShownQuotes[0]);
 
     authorShown = !authorShown;
-    authorButtonEl.innerText = authorShown ? "Hide author" : "Show author";
 
-
-
-    /*quoteEl.innerHTML += `<div class="card my-2 p-2 ps-5">
-                              <h6>${author}</h6>
-                              <div>${info}</div>
-                              <div>Leefde van: ${life}</div>
-                          </div>`;
-    nextQuoteButtonEl.hidden = false;
-    authorButtonEl.hidden = true;*/
+    authorButtonEl.innerText = authorShown ? "Show author" : "Hide author";
 
     showOneRandomQuote();
+
 }
-//toggle button werkt niet
+
 
 function showOneRandomQuote() {
-
-    const availableQuotes = QUOTES.filter(q => !idsOfShownQuotes.includes(q.id)).filter((quote) => {
-            const search = searchInput.value.toLowerCase();
-            return quote.text.toLowerCase().includes(search);
-        });
+    delete availableQuotes;
+    let availableQuotes = QUOTES.filter(q => !idsOfShownQuotes.includes(q.id)).filter((quote) => {
+        const search = searchInput.value.toLowerCase();
+        return quote.text.toLowerCase().includes(search);
+    });
     availableQuotes.forEach((q) => {
-        quoteEl.innerHTML += `<div class="card my-2 p-2"><h5>${q.text}</h5></div>`
-        authorShown ? quoteEl.innerHTML += `<h6>${q.author}</h6>`: "";
-    })
+        quoteEl.innerHTML += `<div class="card my-2 p-2"><h5>${q.text}</h5><button id="favorite">Add to favorites</button></div>`
+        authorShown===false ? quoteEl.innerHTML += `<h6>${q.author}</h6>`: "";
+    });
+
+
+
 
 
 }
 
 showOneRandomQuote();
 
-authorButtonEl.addEventListener("click", showAuthor);
 
 function searchQuote(){
     showOneRandomQuote();
