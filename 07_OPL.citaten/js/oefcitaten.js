@@ -93,10 +93,7 @@ function showOneRandomQuote() {
     if (idsOfShownQuotes.length === QUOTES.length) idsOfShownQuotes = []; // means start over
 
     const availableQuotes = QUOTES.filter(q => !idsOfShownQuotes.includes(q.id));
-    const randomCitaatIndexInAvailableQuotes = Math.floor(Math.random() * availableQuotes.length);
-    const nextQuote = availableQuotes[randomCitaatIndexInAvailableQuotes];
-    idsOfShownQuotes = [nextQuote.id, ...idsOfShownQuotes];
-    console.log(idsOfShownQuotes, availableQuotes);
+    availableQuotes.forEach((q) => quoteEl.innerHTML += `<div class="card my-2 p-2"><h5>${q.text}</h5></div>`)
 
     quoteEl.innerHTML += `<div class="card my-2 p-2"><h5>${QUOTES.find(q => q.id === idsOfShownQuotes[0]).text}</h5></div>`;
     nextQuoteButtonEl.hidden = true;
