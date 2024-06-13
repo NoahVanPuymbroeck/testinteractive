@@ -73,34 +73,54 @@ const QUOTES = [
 const quoteEl = document.getElementById("quote");
 const authorButtonEl = document.getElementById("authorButton");
 const nextQuoteButtonEl = document.getElementById("nextQuoteButton");
+const searchInput = document.getElementById("searchQuoteInput");
 
 //state: changes on user action
 let idsOfShownQuotes = [];
+let authorShown = true;
 
 
 function showAuthor() {
     const {author, info, life} = QUOTES.find(q => q.id === idsOfShownQuotes[0]);
-    quoteEl.innerHTML += `<div class="card my-2 p-2 ps-5">
+
+    authorShown = !authorShown;
+    authorButtonEl.innerText = authorShown ? "Hide author" : "Show author";
+
+
+
+    /*quoteEl.innerHTML += `<div class="card my-2 p-2 ps-5">
                               <h6>${author}</h6>
                               <div>${info}</div>
                               <div>Leefde van: ${life}</div>
                           </div>`;
     nextQuoteButtonEl.hidden = false;
-    authorButtonEl.hidden = true;
+    authorButtonEl.hidden = true;*/
+
+    showOneRandomQuote();
 }
+//toggle button werkt niet
 
 function showOneRandomQuote() {
-    if (idsOfShownQuotes.length === QUOTES.length) idsOfShownQuotes = []; // means start over
 
-    const availableQuotes = QUOTES.filter(q => !idsOfShownQuotes.includes(q.id));
-    availableQuotes.forEach((q) => quoteEl.innerHTML += `<div class="card my-2 p-2"><h5>${q.text}</h5></div>`)
+    const availableQuotes = QUOTES.filter(q => !idsOfShownQuotes.includes(q.id)).filter((quote) => {
+            const search = searchInput.value.toLowerCase();
+            return quote.text.toLowerCase().includes(search);
+        });
+    availableQuotes.forEach((q) => {
+        quoteEl.innerHTML += `<div class="card my-2 p-2"><h5>${q.text}</h5></div>`
+        authorShown ? quoteEl.innerHTML += `<h6>${q.author}</h6>`: "";
+    })
 
-    quoteEl.innerHTML += `<div class="card my-2 p-2"><h5>${QUOTES.find(q => q.id === idsOfShownQuotes[0]).text}</h5></div>`;
-    nextQuoteButtonEl.hidden = true;
-    authorButtonEl.hidden = false;
+
 }
 
 showOneRandomQuote();
+
+authorButtonEl.addEventListener("click", showAuthor);
+
+function searchQuote(){
+    showOneRandomQuote();
+}
 
 
 //stap 1: bij opstart: toon een random citaat
